@@ -6,7 +6,6 @@
 // 18-03-2024
 // ****************************************************************************
 
-
 // ******************************** LIBRAIRIES ********************************
 
 #include <Adafruit_SSD1306.h>
@@ -77,6 +76,7 @@ void setup() {
 
   pinMode(RELAIS1, OUTPUT);
   pinMode(RELAIS2, OUTPUT);
+  pinMode(RELAIS3, OUTPUT);
 
   pinMode(BP_A, INPUT_PULLUP);
   pinMode(BP_B, INPUT_PULLUP);
@@ -84,21 +84,11 @@ void setup() {
 
   initAHT10();
 
-  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
-  display.display();
-  display.clearDisplay();
-  display.display();
-
   lcd.init();
   lcd.backlight();
   lcd.setCursor(0, 0);
 
   servoXdegre(0);
-
-  display.setTextSize(1);
-  display.setTextColor(SSD1306_WHITE);
-  display.setRotation(0);
-  display.setCursor(0, 0);
 
   display.display();
   display.clearDisplay();
@@ -111,7 +101,6 @@ void loop() {
 
 
   // Partie menu
-test
 
   //////////////////////////////////////////////////
   // Capt Lum
