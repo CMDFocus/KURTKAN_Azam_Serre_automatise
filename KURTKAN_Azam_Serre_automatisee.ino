@@ -26,7 +26,7 @@
 
 #define RELAIS1 A1 // Éclairage
 #define RELAIS2 A2 // Chauffage
-#define RELAIS2 A3 // Fenêtre
+#define RELAIS3 A3 // Fenêtre
 
 #define SERVO A4
 
