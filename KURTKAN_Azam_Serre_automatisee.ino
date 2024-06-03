@@ -8,10 +8,8 @@
 
 // ******************************** LIBRAIRIES ********************************
 
-#include <Adafruit_SSD1306.h>
 #include <Servo.h>
 #include <Wire.h>  // Librairie I²C
-#include <Adafruit_NeoPixel.h>
 #include <LiquidCrystal_I2C.h>
 
 // ************************ DÉFINITIONS DES CONSTANTES ************************
@@ -20,13 +18,11 @@
 #define BP_B 11
 #define BP_C 10
 
-#define NEOPIXEL_PIN 8
-
 #define SignalPin A0
 
-#define RELAIS1 A1 // Éclairage
-#define RELAIS2 A2 // Chauffage
-#define RELAIS3 A3 // Fenêtre
+#define RELAIS1 A1  // Éclairage
+#define RELAIS2 A2  // Chauffage
+#define RELAIS3 A3  // Fenêtre
 
 #define SERVO A4
 
@@ -62,15 +58,12 @@ int decimal;
 // ************************** DÉFINITIONS DES OBJETS **************************
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
-Adafruit_SSD1306 display = Adafruit_SSD1306(128, 32, &Wire);
-Adafruit_NeoPixel NeoPixel(1, NEOPIXEL_PIN, NEO_GRB);
 Servo myservo;
 
 ///////////////////////////////////////////////////////////////////////////////
 
 
 void setup() {
-  NeoPixel.begin();
   Serial.begin(9600);
   myservo.attach(SERVO);
 
@@ -89,9 +82,6 @@ void setup() {
   lcd.setCursor(0, 0);
 
   servoXdegre(0);
-
-  display.display();
-  display.clearDisplay();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -108,9 +98,7 @@ void loop() {
   int ValeurBrute = analogRead(SignalPin);
   float Volt = ValeurBrute * (3.3 / 1023) * 1000;
 
-  // display.printf("Lum:%.2f mV\n", Volt);
   lcd.setCursor(0, 0);
-  //lcd.printf("L:%2f mV", Volt);
   lcd.print("L: ");
   lcd.print(Volt);
   lcd.print(" mV");
@@ -121,7 +109,6 @@ void loop() {
   mesureHum();
 
   lcd.setCursor(0, 1);
-  //lcd.printf("H=%.0f,+-2%\n", humidite);
   lcd.print("H: ");
   lcd.print(humidite);
   lcd.print(" % +-2%");
@@ -135,15 +122,11 @@ void loop() {
   int Tentier = int(temperature);                                                                               // Conversion de la partie entière de la température en un nombre entier
   int decimal = int((temperature - Tentier) * 10);                                                              // Avoir 1 chiffre après la virgule
 
-  //lcd.printf("T=%d.C+-0.3C\n", Tentier);
   lcd.print("T:");
   lcd.print(Tentier);
 
 
   // relais
-  //  digitalWrite(RELAIS1, HIGH);
-  //  digitalWrite(RELAIS1, LOW);
-
   // Partie servo
   // Partie bouton
   if (!digitalRead(BP_A)) {
@@ -152,9 +135,11 @@ void loop() {
   if (!digitalRead(BP_B)) {
     digitalWrite(RELAIS1, HIGH);
     digitalWrite(RELAIS2, HIGH);
+    digitalWrite(RELAIS3, HIGH);
   } else {
     digitalWrite(RELAIS1, LOW);
     digitalWrite(RELAIS2, LOW);
+    digitalWrite(RELAIS3, LOW);
   }
   if (!digitalRead(BP_C)) {
     servoXdegre(180);
