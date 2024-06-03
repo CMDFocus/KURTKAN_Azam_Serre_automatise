@@ -40,7 +40,7 @@ entre 3.3V et 0V)
 **Sortie :**
 - 2 sorties relais 5 V, 6.7 μA (à l’unité).
 
-Ouverture de fenêtre :
+**Ouverture de fenêtre :**
 - Servomoteur en 3V3 et 90 mA.
 
 **Électronique :**
@@ -50,8 +50,9 @@ chauffante)
 **Mécanique :**
 - Dimensions : 44.2 x 44.6 x 41 (L x l x H)
 - Poids : 9.1 kg
-- Matériaux : - MDF.
-- Plexiglass.
+- Matériaux :
+  - MDF.
+  - Plexiglass.
 
 
 
