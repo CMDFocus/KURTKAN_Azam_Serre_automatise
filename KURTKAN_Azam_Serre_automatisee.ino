@@ -90,9 +90,6 @@ void setup() {
 void loop() {
 
 
-  // Partie menu
-
-  //////////////////////////////////////////////////
   // Capt Lum
 
   int ValeurBrute = analogRead(SignalPin);
