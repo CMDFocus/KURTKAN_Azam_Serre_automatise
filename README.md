@@ -1,12 +1,14 @@
 # Serre automatisée
  Travail de Fin d'Étude 2023-2024 INRACI.
 
+
 ## Sommaire
 - [Introduction](#introduction)
 - [Caractéristiques](#caractéristiques)
 - [Ordinogramme](#ordinogramme)
 - [Schéma de principe](#schéma-de-principe)
 - [Source](#source)
+
 
 ## Introduction
 
@@ -61,9 +63,10 @@ entre 3.3V et 0V)
 
 ![Diagramme sans nom drawio (14)](https://github.com/CMDFocus/KURTKAN_Azam_Serre_automatise/assets/58083906/cfaae11c-409e-47c1-9b63-a367ea257922)
 
+
 ## Schéma de principe
 
-![Schematic_Serre-autonome_2024-06-03](https://github.com/CMDFocus/KURTKAN_Azam_Serre_automatise/assets/58083906/d61dbd43-000c-4fac-97f2-1b5c1a2c1afe)
+![Schematic_Serre-autonome_2024-06-05](https://github.com/CMDFocus/KURTKAN_Azam_Serre_automatise/assets/58083906/dc5ab350-f0b8-41a2-82fb-cfb488bce9ac)
 
 
 ## Source
