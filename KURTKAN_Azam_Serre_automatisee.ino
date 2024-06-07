@@ -14,6 +14,8 @@
 
 // ************************ DÉFINITIONS DES CONSTANTES ************************
 
+#define LED 12
+
 #define BP_A 13
 #define BP_B 11
 #define BP_C 10
@@ -75,6 +77,8 @@ void setup() {
   pinMode(BP_B, INPUT_PULLUP);
   pinMode(BP_C, INPUT_PULLUP);
 
+  pinMode(LED, OUTPUT);
+
   initAHT10();
 
   lcd.init();
@@ -100,7 +104,16 @@ void loop() {
   bpB();
   bpC();
 
-
+  analogWrite(LED, 0);
+  delay(500);
+  analogWrite(LED, 10);
+  delay(500);
+  analogWrite(LED, 50);
+  delay(500);
+  analogWrite(LED, 100);
+  delay(500);
+  analogWrite(LED, 255);
+  delay(500);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
