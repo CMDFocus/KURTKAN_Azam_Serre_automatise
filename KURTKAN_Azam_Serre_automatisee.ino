@@ -89,43 +89,17 @@ void setup() {
 
 void loop() {
 
-
-  // Capt Lum
-
-  int ValeurBrute = analogRead(SignalPin);
-  float Volt = ValeurBrute * (3.3 / 1023) * 1000;
-
-  lcd.setCursor(0, 0);
-  lcd.print("L: ");
-  lcd.print(Volt);
-  lcd.print(" mV");
+  mesureAffichageLum();
   //Serial.println(Volt);
 
-  // Capt T°Hum
-  /// Partie Humidité
-  mesureHum();
+  mesureAffichageHum();
+  mesureAffichageT();
 
-  lcd.setCursor(0, 1);
-  lcd.print("H: ");
-  lcd.print(humidite);
-  lcd.print(" % +-2%");
+  bpA();
+  bpB();
+  bpC();
 
-
-  /// Partie Température
-  lcd.setCursor(11, 1);
-
-  Raw_temperature = ((uint32_t)(DataBuffer[3] & 0x0F) << 16) | ((uint16_t)DataBuffer[4] << 8) | DataBuffer[5];  // Calcule de la valeur brute de température
-  temperature = Raw_temperature * 0.000191 - 50;                                                                // Calcule de l'humidité avec les valeurs brutes
-  int Tentier = int(temperature);                                                                               // Conversion de la partie entière de la température en un nombre entier
-  int decimal = int((temperature - Tentier) * 10);                                                              // Avoir 1 chiffre après la virgule
-
-  lcd.print("T:");
-  lcd.print(Tentier);
-
-
-  // relais
-  // Partie servo
-  // Partie bouton
+  /*
   if (!digitalRead(BP_A)) {
     servoXdegre(0);
   }
@@ -141,8 +115,7 @@ void loop() {
   if (!digitalRead(BP_C)) {
     servoXdegre(180);
   }
-
-  delay(500);
+*/
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -153,7 +126,7 @@ void servoXdegre(int pos) {
   myservo.write(pos);
 }
 
-void mesureHum() {
+void mesureAffichageHum() {
   Wire.beginTransmission(Adresse_AHT10);     // Début de la transmission(Adresse)
   Wire.write(AHT10_TRIGGER_MEASURMENT_CMD);  // Démarrer une nouvelle mesure
   Wire.write(AHT10_DATA0);                   // 1er donnée lu à partir du capteur associé à °C ou hum%
@@ -172,6 +145,10 @@ void mesureHum() {
   humidite = Raw_humidite * 0.000095;                                                                        // Calcule de l'humidité avec les valeurs brutes
   if (humidite < 1) humidite = 0;                                                                            // Ajuster la valeur d'humidité à 0% si hum=1%
   if (humidite > 99) humidite = 100;                                                                         // Ajuster la valeur d'humidité à 100% si hum=99%
+  lcd.setCursor(0, 1);
+  lcd.print("H: ");
+  lcd.print(humidite);
+  lcd.print(" % +-2%");
 }
 
 void initAHT10() {
@@ -225,6 +202,50 @@ bool gestionHumOFF(int hum, int hmax) {
   if (hum > hmax) {
     return 1;
   } else return 0;
+}
+
+void mesureAffichageLum() {
+  int ValeurBrute = analogRead(SignalPin);
+  float Volt = ValeurBrute * (3.3 / 1023) * 1000;
+
+  lcd.setCursor(0, 0);
+  lcd.print("L: ");
+  lcd.print(Volt);
+  lcd.print(" mV");
+}
+void mesureAffichageT() {
+  Raw_temperature = ((uint32_t)(DataBuffer[3] & 0x0F) << 16) | ((uint16_t)DataBuffer[4] << 8) | DataBuffer[5];  // Calcule de la valeur brute de température
+  temperature = Raw_temperature * 0.000191 - 50;                                                                // Calcule de l'humidité avec les valeurs brutes
+  int Tentier = int(temperature);                                                                               // Conversion de la partie entière de la température en un nombre entier
+  int decimal = int((temperature - Tentier) * 10);                                                              // Avoir 1 chiffre après la virgule
+
+  lcd.setCursor(11, 1);
+  lcd.print("T:");
+  lcd.print(Tentier);
+}
+
+void bpA() {
+  if (!digitalRead(BP_A)) {
+    servoXdegre(0);
+  }
+}
+
+void bpB() {
+  if (!digitalRead(BP_B)) {
+    digitalWrite(RELAIS1, HIGH);
+    digitalWrite(RELAIS2, HIGH);
+    digitalWrite(RELAIS3, HIGH);
+  } else {
+    digitalWrite(RELAIS1, LOW);
+    digitalWrite(RELAIS2, LOW);
+    digitalWrite(RELAIS3, LOW);
+  }
+}
+
+void bpC() {
+  if (!digitalRead(BP_C)) {
+    servoXdegre(180);
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
