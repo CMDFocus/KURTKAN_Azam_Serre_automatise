@@ -82,6 +82,9 @@ void setup() {
   lcd.setCursor(0, 0);
 
   servoXdegre(0);
+
+  Serial.println("Mesures des capteurs");
+  Serial.println(" ");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -90,8 +93,6 @@ void setup() {
 void loop() {
 
   mesureAffichageLum();
-  //Serial.println(Volt);
-
   mesureAffichageHum();
   mesureAffichageT();
 
@@ -99,28 +100,29 @@ void loop() {
   bpB();
   bpC();
 
-  /*
-  if (!digitalRead(BP_A)) {
-    servoXdegre(0);
-  }
-  if (!digitalRead(BP_B)) {
-    digitalWrite(RELAIS1, HIGH);
-    digitalWrite(RELAIS2, HIGH);
-    digitalWrite(RELAIS3, HIGH);
-  } else {
-    digitalWrite(RELAIS1, LOW);
-    digitalWrite(RELAIS2, LOW);
-    digitalWrite(RELAIS3, LOW);
-  }
-  if (!digitalRead(BP_C)) {
-    servoXdegre(180);
-  }
-*/
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 // ************************** Fonctions personalisée **************************
+
+void initAHT10() {
+  Wire.begin();            // Initialisation de la communication I2C
+  Wire.setClock(100000L);  // Configure la CLK de la com I2C 100kHz (L = entiers longs => nombres entiers sur un plus grand nombre de bits par rapport aux entiers standards)
+  delay(AHT10_POWER_ON_DELAY);
+
+  Wire.beginTransmission(Adresse_AHT10);  // Début de la transmission(Adresse)
+  Wire.write(AHT10_SOFT_RESET_CMD);       // Reset software
+  Wire.endTransmission();                 // Fin de la tranmission
+  delay(AHT10_SOFT_RESET_DELAY);          // Temps d'attente pour un reset logiciel
+
+  Wire.beginTransmission(Adresse_AHT10);
+  Wire.write(AHT10_INIT_CMD);
+  Wire.write(AHT10_TRIGGER_MEASURMENT_CMD);
+  Wire.endTransmission();
+  delay(AHT10_CMD_DELAY);
+}
 
 void servoXdegre(int pos) {
   myservo.write(pos);
@@ -149,59 +151,10 @@ void mesureAffichageHum() {
   lcd.print("H: ");
   lcd.print(humidite);
   lcd.print(" % +-2%");
-}
 
-void initAHT10() {
-  Wire.begin();            // Initialisation de la communication I2C
-  Wire.setClock(100000L);  // Configure la CLK de la com I2C 100kHz (L = entiers longs => nombres entiers sur un plus grand nombre de bits par rapport aux entiers standards)
-  delay(AHT10_POWER_ON_DELAY);
-
-  Wire.beginTransmission(Adresse_AHT10);  // Début de la transmission(Adresse)
-  Wire.write(AHT10_SOFT_RESET_CMD);       // Reset software
-  Wire.endTransmission();                 // Fin de la tranmission
-  delay(AHT10_SOFT_RESET_DELAY);          // Temps d'attente pour un reset logiciel
-
-  Wire.beginTransmission(Adresse_AHT10);
-  Wire.write(AHT10_INIT_CMD);
-  Wire.write(AHT10_TRIGGER_MEASURMENT_CMD);
-  Wire.endTransmission();
-  delay(AHT10_CMD_DELAY);
-}
-
-bool gestionChauffage(int t, int tmin) {
-  if (t < tmin) {
-    return 1;
-  } else return 0;
-}
-
-bool gestionFroid(int t, int tmax) {
-  if (t > tmax) {
-    return 1;
-  } else return 0;
-}
-
-bool gestionLedON(int lum, int lmin) {
-  if (lum < lmin) {
-    return 1;
-  } else return 0;
-}
-
-bool gestionLedOFF(int lum, int lmax) {
-  if (lum > lmax) {
-    return 1;
-  } else return 0;
-}
-
-bool gestionHumON(int hum, int hmin) {
-  if (hum < hmin) {
-    return 1;
-  } else return 0;
-}
-
-bool gestionHumOFF(int hum, int hmax) {
-  if (hum > hmax) {
-    return 1;
-  } else return 0;
+  Serial.print("Humidité : ");
+  Serial.print(humidite);
+  Serial.println(" % +-2%");
 }
 
 void mesureAffichageLum() {
@@ -212,6 +165,11 @@ void mesureAffichageLum() {
   lcd.print("L: ");
   lcd.print(Volt);
   lcd.print(" mV");
+
+  Serial.print("Luminosité : ");
+  Serial.print(Volt);
+  Serial.println("mV");
+  Serial.println("===============================");
 }
 void mesureAffichageT() {
   Raw_temperature = ((uint32_t)(DataBuffer[3] & 0x0F) << 16) | ((uint16_t)DataBuffer[4] << 8) | DataBuffer[5];  // Calcule de la valeur brute de température
@@ -222,6 +180,10 @@ void mesureAffichageT() {
   lcd.setCursor(11, 1);
   lcd.print("T:");
   lcd.print(Tentier);
+
+  Serial.print("Température : ");
+  Serial.print(Tentier);
+  Serial.println(" °C +-0.3°");
 }
 
 void bpA() {
