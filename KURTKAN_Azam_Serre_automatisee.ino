@@ -103,17 +103,6 @@ void loop() {
   bpA();
   bpB();
   bpC();
-
-  analogWrite(LED, 0);
-  delay(500);
-  analogWrite(LED, 10);
-  delay(500);
-  analogWrite(LED, 50);
-  delay(500);
-  analogWrite(LED, 100);
-  delay(500);
-  analogWrite(LED, 255);
-  delay(500);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -160,6 +149,15 @@ void mesureAffichageHum() {
   humidite = Raw_humidite * 0.000095;                                                                        // Calcule de l'humidité avec les valeurs brutes
   if (humidite < 1) humidite = 0;                                                                            // Ajuster la valeur d'humidité à 0% si hum=1%
   if (humidite > 99) humidite = 100;                                                                         // Ajuster la valeur d'humidité à 100% si hum=99%
+
+  if (humidite > 65) {
+    digitalWrite(RELAIS2, HIGH);
+  }
+
+  if (humidite < 65) {
+    digitalWrite(RELAIS2, LOW);
+  }
+
   lcd.setCursor(0, 1);
   lcd.print("H: ");
   lcd.print(humidite);
@@ -174,6 +172,25 @@ void mesureAffichageLum() {
   int ValeurBrute = analogRead(SignalPin);
   float Volt = ValeurBrute * (3.3 / 1023) * 1000;
 
+  digitalWrite(RELAIS3, HIGH);  // Indicateur de lumière
+  if (Volt > 1300) {
+    analogWrite(LED, 50);
+  }
+
+  if (Volt < 850) {
+    analogWrite(LED, 200);
+  }
+
+  if (Volt < 700) {
+    analogWrite(LED, 0);
+    digitalWrite(RELAIS3, LOW);
+  }
+  /*
+  if (Volt != 0) {
+    digitalWrite(RELAIS3, HIGH);
+  }
+  else digitalWrite(RELAIS3, LOW);
+*/
   lcd.setCursor(0, 0);
   lcd.print("L: ");
   lcd.print(Volt);
@@ -189,6 +206,12 @@ void mesureAffichageT() {
   temperature = Raw_temperature * 0.000191 - 50;                                                                // Calcule de l'humidité avec les valeurs brutes
   int Tentier = int(temperature);                                                                               // Conversion de la partie entière de la température en un nombre entier
   int decimal = int((temperature - Tentier) * 10);                                                              // Avoir 1 chiffre après la virgule
+
+  digitalWrite(RELAIS1, LOW);
+  if (Tentier > 21) {
+    servoXdegre(0);
+    digitalWrite(RELAIS1, HIGH);
+  }
 
   lcd.setCursor(11, 1);
   lcd.print("T:");
@@ -206,15 +229,7 @@ void bpA() {
 }
 
 void bpB() {
-  if (!digitalRead(BP_B)) {
-    digitalWrite(RELAIS1, HIGH);
-    digitalWrite(RELAIS2, HIGH);
-    digitalWrite(RELAIS3, HIGH);
-  } else {
-    digitalWrite(RELAIS1, LOW);
-    digitalWrite(RELAIS2, LOW);
-    digitalWrite(RELAIS3, LOW);
-  }
+  
 }
 
 void bpC() {
