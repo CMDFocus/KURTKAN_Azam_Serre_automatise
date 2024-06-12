@@ -185,12 +185,7 @@ void mesureAffichageLum() {
     analogWrite(LED, 0);
     digitalWrite(RELAIS3, LOW);
   }
-  /*
-  if (Volt != 0) {
-    digitalWrite(RELAIS3, HIGH);
-  }
-  else digitalWrite(RELAIS3, LOW);
-*/
+
   lcd.setCursor(0, 0);
   lcd.print("L: ");
   lcd.print(Volt);
