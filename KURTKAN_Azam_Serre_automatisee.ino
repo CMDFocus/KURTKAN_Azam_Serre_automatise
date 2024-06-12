@@ -206,7 +206,8 @@ void mesureAffichageT() {
   if (Tentier > 21) {
     servoXdegre(0);
     digitalWrite(RELAIS1, HIGH);
-  }
+    Serial.println("Fenêtre fermée, relais rouge allumé");
+  } 
 
   lcd.setCursor(11, 1);
   lcd.print("T:");
