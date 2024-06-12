@@ -29,6 +29,8 @@ préréglées pour enregistrer et utiliser des paramètres pour des plantes en p
 Par exemple, pouvoir choisir “pomme de terre” et donc il n’y aura pas de réel réglage
 à faire.
 
+https://github.com/CMDFocus/KURTKAN_Azam_Serre_automatise/assets/58083906/960ff472-e3eb-4736-a010-c1253f0df01b
+
 
 ## Caractéristiques
 
